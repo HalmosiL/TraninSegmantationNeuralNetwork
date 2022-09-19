@@ -46,13 +46,8 @@ def train(CONFIG_PATH, CONFIG, train_loader_adversarial_, val_loader_, start):
 
         print("Train Adversarial loader length:", train_loader_len)
         print("Val Adversarial loader length:", val_loader_len)
-        
-        cut = 0
-        batch_id = 0
-        count_no = 0
 
-        check_ = 0
-        no_batch = 0
+        batch_id = 0
         
         for data in train_loader:
             image_normal, target_normal = data.to(CONFIG['DEVICE_TRAIN'])
@@ -140,6 +135,7 @@ def train(CONFIG_PATH, CONFIG, train_loader_adversarial_, val_loader_, start):
                 iou_val_epoch += iou
                 loss_val_epoch += loss
                 acc_val_epoch += acc
+                batch_id += 1
             print("Val Normal Finished:", batch_id * 100 / val_loader_.__len__(), end="\r")
                 
         loss_val_epoch = loss_val_epoch / val_loader_.__len__()
