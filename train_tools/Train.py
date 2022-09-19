@@ -79,8 +79,7 @@ def train(CONFIG_PATH, CONFIG, train_loader, val_loader_, start):
             iou_train_epoch += iou
             loss_train_epoch += loss.item()
             acc_train_epoch += acc
-
-            removeFiles(remove_files)
+            
             batch_id += 1
             current_iter += 1
             
