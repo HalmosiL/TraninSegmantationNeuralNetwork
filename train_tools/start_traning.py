@@ -7,7 +7,6 @@ import subprocess
 import time
 
 sys.path.insert(0, "../")
-from dataset.GetDatasetLoader import getDatasetLoader
 from dataset.Dataset import SemData
 from train_tools.Train import train
 import util.Transforms as transform
