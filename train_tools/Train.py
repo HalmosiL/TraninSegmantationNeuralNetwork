@@ -50,7 +50,9 @@ def train(CONFIG_PATH, CONFIG, train_loader, val_loader_, start):
         batch_id = 0
         
         for data in train_loader:
-            image_normal, target_normal = data.to(CONFIG['DEVICE_TRAIN'])
+            image_normal, target_normal = data
+            image_normal = image_normal.to(CONFIG['DEVICE_TRAIN'])
+            target_normal = target_normal.to(CONFIG['DEVICE_TRAIN'])
             
             print(image_normal.shape)
             print(target_normal.shape)
