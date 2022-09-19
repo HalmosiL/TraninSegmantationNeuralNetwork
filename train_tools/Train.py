@@ -30,12 +30,12 @@ def train(CONFIG_PATH, CONFIG, train_loader, val_loader_, start):
         lr=CONFIG['LEARNING_RATE'], momentum=CONFIG['MOMENTUM'], weight_decay=CONFIG['WEIGHT_DECAY'])
     print("Traning started.....")
     
-    max_iter = int(CONFIG["EPOCHS"] * CONFIG["TRAIN_DATASET_SIZE"] / CONFIG["TRAIN_BATCH_SIZE"])
+    max_iter = CONFIG["EPOCHS"] * train_loader.__len__()
 
     train_loader_len = int(CONFIG["TRAIN_DATASET_SIZE"] / CONFIG["TRAIN_BATCH_SIZE"])
     val_loader_len = int(CONFIG["VAL_DATASET_SIZE"] / CONFIG["TRAIN_BATCH_SIZE"])
     
-    current_iter = 0
+    current_iter = 1
     
     for e in range(CONFIG["EPOCHS"]):
         model = model.train()
