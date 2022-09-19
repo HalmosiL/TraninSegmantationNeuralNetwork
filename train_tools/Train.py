@@ -97,8 +97,6 @@ def train(CONFIG_PATH, CONFIG, train_loader, val_loader_, start):
         torch.save(model.state_dict(), CONFIG["MODEL_SAVE"] + CONFIG["MODEL_NAME"] + "_" + str(e) + ".pt")
         torch.save(optimizer.state_dict(), CONFIG["MODEL_SAVE"] + CONFIG["MODEL_NAME"] + "_optimizer" + str(e) + ".pt")
 
-        cache_id = cacheModel(cache_id, model, CONFIG)
-
         model = model.eval()
 
         loss_val_epoch = 0
