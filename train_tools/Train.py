@@ -80,9 +80,6 @@ def train(CONFIG_PATH, CONFIG, train_loader, val_loader_, start):
             loss_train_epoch += loss.item()
             acc_train_epoch += acc
 
-            if(e % CONFIG["MODEL_CACHE_PERIOD"] == 0):
-                cache_id = cacheModel(cache_id, model, CONFIG)
-
             removeFiles(remove_files)
             batch_id += 1
             current_iter += 1
