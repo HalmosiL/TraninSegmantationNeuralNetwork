@@ -14,7 +14,7 @@ from models.Model import get_model
 from util.Metrics import intersectionAndUnion
 from util.WBLogger import LogerWB
 
-def train(CONFIG_PATH, CONFIG, train_loader_adversarial_, val_loader_, start):
+def train(CONFIG_PATH, CONFIG, train_loader, val_loader_, start):
     logger = LogerWB(CONFIG["WB_LOG"], print_messages=CONFIG["PRINT_LOG"])
     
     model = get_model(CONFIG['DEVICE_TRAIN'])
