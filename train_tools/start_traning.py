@@ -43,7 +43,7 @@ if __name__ == '__main__':
             transform=val_transform
         ),
         batch_size=16,
-        num_workers=8,
+        num_workers=12,
         pin_memory=True
     )
 
@@ -67,7 +67,7 @@ if __name__ == '__main__':
         train_data,
         batch_size=16,
         shuffle=True,
-        num_workers=8,
+        num_workers=12,
         pin_memory=False,
         drop_last=True
     )
