@@ -72,4 +72,4 @@ if __name__ == '__main__':
         drop_last=True
     )
 
-    train(CONFIG_PATH, CONFIG, train_loader_adversarial, val_loader, start)
+    train(CONFIG_PATH, CONFIG, train_data_set_loader, val_loader, start)
