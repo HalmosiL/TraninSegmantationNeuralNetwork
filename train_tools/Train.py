@@ -104,7 +104,7 @@ def train(CONFIG_PATH, CONFIG, train_loader, val_loader_, start):
         val_status = 0
         
         logging.info("Set val...")
-        logging.info(f"Val finished:{val_status / val_loader_len[:5]}%")
+        logging.info(f"Val finished:{str(val_status / val_loader_len)[:5]}%")
 
         loss_val_epoch = 0
         iou_val_epoch = 0
@@ -130,7 +130,7 @@ def train(CONFIG_PATH, CONFIG, train_loader, val_loader_, start):
                 loss_val_epoch += loss
                 acc_val_epoch += acc
                 batch_id += 1
-            logging.info(f"Val Normal Finished:{batch_id * 100 / val_loader_.__len__()}")
+            logging.info(f"Val Normal Finished:{str(batch_id * 100 / val_loader_.__len__())}")
                 
         loss_val_epoch = loss_val_epoch / val_loader_.__len__()
         iou_val_epoch = iou_val_epoch / val_loader_.__len__()
