@@ -14,6 +14,7 @@ from util.Optimizer import poly_learning_rate
 from models.Model import get_model
 from util.Metrics import intersectionAndUnion
 from util.WBLogger import LogerWB
+from util.AverageMeter import AverageMeter
 
 def train(CONFIG_PATH, CONFIG, train_loader, val_loader_, start):
     logger = LogerWB(CONFIG["WB_LOG"], print_messages=CONFIG["PRINT_LOG"])
@@ -41,9 +42,10 @@ def train(CONFIG_PATH, CONFIG, train_loader, val_loader_, start):
     for e in range(CONFIG["EPOCHS"]):
         model = model.train()
 
-        loss_train_epoch = 0
-        iou_train_epoch = 0
-        acc_train_epoch = 0
+        loss_meter = AverageMeter()
+        intersection_meter = AverageMeter()
+        union_meter = AverageMeter()
+        target_meter = AverageMeter()
 
         logging.info(f"Train Adversarial loader length:{train_loader_len}")
         logging.info(f"Val Adversarial loader length:{val_loader_len}")
@@ -67,6 +69,9 @@ def train(CONFIG_PATH, CONFIG, train_loader, val_loader_, start):
             intersection_normal, union_normal, target_normal = intersectionAndUnion(output_normal, target_normal, CONFIG['CALSSES'], CONFIG['IGNOR_LABEL'])
             intersection_normal, union_normal, target_normal = intersection_normal.cpu().numpy(), union_normal.cpu().numpy(), target_normal.cpu().numpy()
             
+            intersection_meter.update(intersection), union_meter.update(union), target_meter.update(target)
+            loss_meter.update(loss.item(), image_normal.size(0))
+            
             iou = np.mean(intersection_normal / (union_normal + 1e-10))
             acc = sum(intersection_normal) / sum(target_normal)
 
@@ -84,13 +89,14 @@ def train(CONFIG_PATH, CONFIG, train_loader, val_loader_, start):
             logger.log_current_iter_epoch(current_iter)
             logger.log_epoch(int(e))
 
-        loss_train_epoch = loss_train_epoch / batch_id
-        iou_train_epoch = iou_train_epoch / batch_id
-        acc_train_epoch = acc_train_epoch / batch_id
+        iou_class = intersection_meter.sum / (union_meter.sum + 1e-10)
+        mIoU = np.mean(iou_class)
+        
+        allAcc = sum(intersection_meter.sum) / (sum(target_meter.sum) + 1e-10)
 
-        logger.log_loss_epoch_train_adversarial(e, loss_train_epoch)
-        logger.log_iou_epoch_train_adversarial(e, iou_train_epoch)
-        logger.log_acc_epoch_train_adversarial(e, acc_train_epoch)
+        logger.log_loss_epoch_train_adversarial(e, loss_meter.sum)
+        logger.log_iou_epoch_train_adversarial(e, mIoU)
+        logger.log_acc_epoch_train_adversarial(e, allAcc)
 
         torch.save(model.state_dict(), CONFIG["MODEL_SAVE"] + CONFIG["MODEL_NAME"] + "_" + str(e) + ".pt")
         torch.save(optimizer.state_dict(), CONFIG["MODEL_SAVE"] + CONFIG["MODEL_NAME"] + "_optimizer" + str(e) + ".pt")
@@ -105,12 +111,13 @@ def train(CONFIG_PATH, CONFIG, train_loader, val_loader_, start):
         
         logging.info("Set val...")
         logging.info(f"Val finished:{str(val_status / val_loader_len)[:5]}%")
-
-        loss_val_epoch = 0
-        iou_val_epoch = 0
-        acc_val_epoch = 0
         
         batch_id = 0
+        
+        loss_meter = AverageMeter()
+        intersection_meter = AverageMeter()
+        union_meter = AverageMeter()
+        target_meter = AverageMeter()
         
         for data in val_loader_:
             with torch.no_grad():
@@ -122,20 +129,18 @@ def train(CONFIG_PATH, CONFIG, train_loader, val_loader_, start):
 
                 intersection, union, target = intersectionAndUnion(output, target, CONFIG['CALSSES'], CONFIG['IGNOR_LABEL'])
                 intersection, union, target = intersection.cpu().numpy(), union.cpu().numpy(), target.cpu().numpy()
+                
+                intersection_meter.update(intersection), union_meter.update(union), target_meter.update(target)
+                loss_meter.update(loss.item(), image_val.size(0))
 
-                iou = np.mean(intersection / (union + 1e-10))
-                acc = sum(intersection) / (sum(target) + 1e-10)
-
-                iou_val_epoch += iou
-                loss_val_epoch += loss
-                acc_val_epoch += acc
                 batch_id += 1
             logging.info(f"Val Normal Finished:{str(batch_id * 100 / val_loader_.__len__())}")
                 
-        loss_val_epoch = loss_val_epoch / val_loader_.__len__()
-        iou_val_epoch = iou_val_epoch / val_loader_.__len__()
-        acc_val_epoch = acc_val_epoch / val_loader_.__len__()
+        iou_class = intersection_meter.sum / (union_meter.sum + 1e-10)
+        mIoU = np.mean(iou_class)
+        
+        allAcc = sum(intersection_meter.sum) / (sum(target_meter.sum) + 1e-10)
 
-        logger.log_loss_epoch_val(e, loss_val_epoch)
-        logger.log_iou_epoch_val(e, iou_val_epoch)
-        logger.log_acc_epoch_val(e, acc_val_epoch)
+        logger.log_loss_epoch_val(e, loss_meter.sum)
+        logger.log_iou_epoch_val(e, mIoU)
+        logger.log_acc_epoch_val(e, allAcc)
