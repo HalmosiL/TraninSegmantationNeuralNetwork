@@ -75,7 +75,7 @@ if __name__ == '__main__':
         drop_last=True
     )
 
-    try
+    try:
         train(CONFIG_PATH, CONFIG, train_data_set_loader, val_loader, start)
     except Exception as e:
         logging.exception(str(e))
