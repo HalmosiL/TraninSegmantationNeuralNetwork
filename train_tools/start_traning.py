@@ -5,6 +5,7 @@ import torch
 import json
 import subprocess
 import time
+import logging
 
 sys.path.insert(0, "../")
 from dataset.Dataset import SemData
@@ -22,6 +23,8 @@ if __name__ == '__main__':
     CONFIG_PATH = sys.argv[1]
     CONFIG = json.load(open(CONFIG_PATH, "r+"))
 
+    logging.basicConfig(level=logging.DEBUG, filename=CONFIG_PATH['LOG_PATH'])
+    
     args_dataset = CONFIG['DATASET']
 
     value_scale = 255
@@ -72,4 +75,7 @@ if __name__ == '__main__':
         drop_last=True
     )
 
-    train(CONFIG_PATH, CONFIG, train_data_set_loader, val_loader, start)
+    try
+        train(CONFIG_PATH, CONFIG, train_data_set_loader, val_loader, start)
+    except Exception as e:
+        logging.exception(str(e))
