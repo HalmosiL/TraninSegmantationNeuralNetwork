@@ -25,7 +25,7 @@ if __name__ == '__main__':
 
     if(CONFIG["LOG_MODE"] == "DEBUG"):
         logging.basicConfig(level=logging.DEBUG, filename=CONFIG['LOG_PATH'])
-    elif(CONFIG["LOG_MODE"] == "INFO")
+    elif(CONFIG["LOG_MODE"] == "INFO"):
         logging.basicConfig(level=logging.INFO, filename=CONFIG['LOG_PATH'])
     
     args_dataset = CONFIG['DATASET']
