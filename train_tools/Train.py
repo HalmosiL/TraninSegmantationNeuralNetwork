@@ -6,6 +6,7 @@ import time
 import numpy as np
 import json
 import time
+import logging
 
 sys.path.insert(0, "../")
 
