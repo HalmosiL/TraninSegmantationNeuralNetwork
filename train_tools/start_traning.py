@@ -23,7 +23,10 @@ if __name__ == '__main__':
     CONFIG_PATH = sys.argv[1]
     CONFIG = json.load(open(CONFIG_PATH, "r+"))
 
-    logging.basicConfig(level=logging.DEBUG, filename=CONFIG['LOG_PATH'])
+    if(CONFIG["LOG_MODE"] == "DEBUG"):
+        logging.basicConfig(level=logging.DEBUG, filename=CONFIG['LOG_PATH'])
+    elif(CONFIG["LOG_MODE"] == "INFO")
+        logging.basicConfig(level=logging.INFO, filename=CONFIG['LOG_PATH'])
     
     args_dataset = CONFIG['DATASET']
 
