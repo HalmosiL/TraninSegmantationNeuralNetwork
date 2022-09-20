@@ -78,10 +78,6 @@ def train(CONFIG_PATH, CONFIG, train_loader, val_loader_, start):
             logger.log_loss_batch_train_adversarial(train_loader_len, e, batch_id + 1, loss.item())
             logger.log_iou_batch_train_adversarial(train_loader_len, e, batch_id + 1, iou)
             logger.log_acc_batch_train_adversarial(train_loader_len, e, batch_id + 1, acc)
-
-            iou_train_epoch += iou
-            loss_train_epoch += loss.item()
-            acc_train_epoch += acc
             
             batch_id += 1
             current_iter += 1
