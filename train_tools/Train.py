@@ -69,7 +69,7 @@ def train(CONFIG_PATH, CONFIG, train_loader, val_loader_, start):
             intersection_normal, union_normal, target_normal = intersectionAndUnion(output_normal, target_normal, CONFIG['CALSSES'], CONFIG['IGNOR_LABEL'])
             intersection_normal, union_normal, target_normal = intersection_normal.cpu().numpy(), union_normal.cpu().numpy(), target_normal.cpu().numpy()
             
-            intersection_meter.update(intersection), union_meter.update(union), target_meter.update(target)
+            intersection_meter.update(intersection_normal), union_meter.update(union_normal), target_meter.update(target_normal)
             loss_meter.update(loss.item(), image_normal.size(0))
             
             iou = np.mean(intersection_normal / (union_normal + 1e-10))
