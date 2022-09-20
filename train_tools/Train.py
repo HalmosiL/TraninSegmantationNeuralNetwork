@@ -44,8 +44,8 @@ def train(CONFIG_PATH, CONFIG, train_loader, val_loader_, start):
         iou_train_epoch = 0
         acc_train_epoch = 0
 
-        print("Train Adversarial loader length:", train_loader_len)
-        print("Val Adversarial loader length:", val_loader_len)
+        logging.info(f"Train Adversarial loader length:{train_loader_len}")
+        logging.info(f"Val Adversarial loader length:{val_loader_len}")
 
         batch_id = 0
         
@@ -53,9 +53,6 @@ def train(CONFIG_PATH, CONFIG, train_loader, val_loader_, start):
             image_normal, target_normal = data
             image_normal = image_normal.to(CONFIG['DEVICE_TRAIN'])
             target_normal = target_normal.to(CONFIG['DEVICE_TRAIN'])
-            
-            print(image_normal.shape)
-            print(target_normal.shape)
 
             poly_learning_rate(optimizer, CONFIG['LEARNING_RATE'], current_iter, max_iter, power=CONFIG['POWER'])
             optimizer.zero_grad()
@@ -105,8 +102,8 @@ def train(CONFIG_PATH, CONFIG, train_loader, val_loader_, start):
 
         val_status = 0
         
-        print("Set val...")
-        print("Val finished:" + str(val_status / val_loader_len)[:5] + "%", end="\r")
+        logging.info("Set val...")
+        logging.info(f"Val finished:{val_status / val_loader_len[:5]}%")
 
         loss_val_epoch = 0
         iou_val_epoch = 0
@@ -132,7 +129,7 @@ def train(CONFIG_PATH, CONFIG, train_loader, val_loader_, start):
                 loss_val_epoch += loss
                 acc_val_epoch += acc
                 batch_id += 1
-            print("Val Normal Finished:", batch_id * 100 / val_loader_.__len__(), end="\r")
+            logging.info(f"Val Normal Finished:{batch_id * 100 / val_loader_.__len__()}")
                 
         loss_val_epoch = loss_val_epoch / val_loader_.__len__()
         iou_val_epoch = iou_val_epoch / val_loader_.__len__()
