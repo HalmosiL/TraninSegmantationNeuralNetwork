@@ -23,7 +23,7 @@ if __name__ == '__main__':
     CONFIG_PATH = sys.argv[1]
     CONFIG = json.load(open(CONFIG_PATH, "r+"))
 
-    logging.basicConfig(level=logging.DEBUG, filename=CONFIG_PATH['LOG_PATH'])
+    logging.basicConfig(level=logging.DEBUG, filename=CONFIG['LOG_PATH'])
     
     args_dataset = CONFIG['DATASET']
 
